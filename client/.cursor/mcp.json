@@ -1,0 +1,12 @@
+{
+    "mcpServers": {
+      "Context7": {
+        "url": "https://mcp.context7.com/mcp",
+        "headers": {}
+      },
+      "nuxt-ui": {
+        "type": "http",
+        "url": "https://ui.nuxt.com/mcp"
+      }
+    }
+  }

@@ -1,0 +1,19 @@
+{
+  "name": "lingoflow",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "start:dev": "npm run start:dev --prefix server & npm run dev --prefix client",
+    "build:all": "npm run build --prefix server && npm run build --prefix client",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down"
+  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

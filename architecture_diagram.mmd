@@ -1,0 +1,90 @@
+graph TD
+    subgraph client
+        A[User Interface] --> B(Login/Register);
+        A --> C(Chat Window);
+        C --> D{Send Message};
+        C --> E{SSE Stream};
+    end
+
+    subgraph server
+        subgraph API
+            F[Auth Controller]
+            G[Conversations Controller]
+            H[Messages Controller]
+        end
+
+        subgraph Services
+            I[Auth Service]
+            J[Users Service]
+            K[Providers Service]
+            L[Conversations Service]
+            M[Messages Service]
+            N[Queue Service Producer]
+            O[LLM Gateway Service]
+        end
+
+        subgraph Queue
+            P[Generation Queue]
+            Q[Queue Consumer]
+        end
+
+        subgraph Database
+            R[Users Table]
+            S[Conversations Table]
+            T[Messages Table]
+            U[Providers Table]
+        end
+
+        subgraph External
+            V[OpenAI API]
+            W[Anthropic API]
+        end
+
+        H -- 1. Save User Message --> T
+        H -- 2. Publish Task --> P
+        H -- 3. Open SSE --> E
+        Q -- 4. Consume Task --> O
+        O -- 5. Call External API --> V
+        V -- 6. Stream Chunks --> O
+        O -- 7. Stream Chunks --> M
+        M -- 8. Push to SSE Clients --> E
+        O -- 9. Save LLM Message --> T
+    end
+
+    subgraph DevOps
+        X[Nginx Reverse Proxy]
+        Y[Docker Compose]
+    end
+
+    D --> X
+    E --> X
+    X --> F
+    X --> G
+    X --> H
+    I --> R
+    L --> S
+    M --> T
+    K --> U
+    N --> P
+    Q --> O
+    O --> V
+    O --> W
+    Y --> client
+    Y --> server
+    Y --> Database
+    Y --> Queue
+    Y --> X
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style O fill:#afa,stroke:#333,stroke-width:2px
+    style P fill:#ff9,stroke:#333,stroke-width:2px
+    style R fill:#ddf,stroke:#333,stroke-width:2px
+    style S fill:#ddf,stroke:#333,stroke-width:2px
+    style T fill:#ddf,stroke:#333,stroke-width:2px
+    style U fill:#ddf,stroke:#333,stroke-width:2px
+    style V fill:#faa,stroke:#333,stroke-width:2px
+    style W fill:#faa,stroke:#333,stroke-width:2px
+    style X fill:#fcf,stroke:#333,stroke-width:2px
+    style Y fill:#fcf,stroke:#333,stroke-width:2px
